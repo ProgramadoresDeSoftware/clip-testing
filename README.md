@@ -13,6 +13,8 @@ El pipeline automatiza las pruebas de login con dos escenarios:
 - `Jenkinsfile`: Definición del pipeline de Jenkins
 - `test_login.py`: Script de prueba en Python usando Selenium
 - `requirements.txt`: Dependencias de Python necesarias
+- `JENKINS_SETUP.md`: Instrucciones detalladas de configuración de Jenkins
+- `DIAGNOSTICO_JENKINS.md`: Diagnóstico de problemas comunes y salida esperada
 
 ## Requisitos
 
@@ -54,6 +56,17 @@ python3 test_login.py --mode incorrect
 1. Crear un nuevo pipeline en Jenkins
 2. Configurar el pipeline para usar el repositorio
 3. Jenkins automáticamente detectará el `Jenkinsfile` y ejecutará el pipeline
+
+**Importante:** El job debe estar configurado como **Pipeline**, no como Freestyle Project. Si solo ves operaciones de git en la salida y no mensajes de los tests, consulta `DIAGNOSTICO_JENKINS.md` para solucionar el problema.
+
+### Salida Esperada
+
+Cuando los tests se ejecutan correctamente, deberías ver mensajes claros como:
+- `✓ LOGIN SUCCESS - TEST PASSED` (para credenciales correctas)
+- `✓ LOGIN CORRECTLY REJECTED - TEST PASSED` (para credenciales incorrectas)
+- `SCRIPT FINALIZADO EXITOSAMENTE`
+
+Si no ves estos mensajes, consulta `DIAGNOSTICO_JENKINS.md` para diagnóstico y solución.
 
 ## Estructura del Pipeline
 

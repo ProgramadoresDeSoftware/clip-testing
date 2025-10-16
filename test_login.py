@@ -40,6 +40,9 @@ def setup_driver():
 
 def test_login_correct():
     """Prueba el login con credenciales correctas"""
+    print("="*70)
+    print("INICIANDO TEST DE LOGIN CON CREDENCIALES CORRECTAS")
+    print("="*70)
     print(f"Probando login con credenciales CORRECTAS en {LOGIN_URL}")
     
     driver = setup_driver()
@@ -126,17 +129,29 @@ def test_login_correct():
             else:
                 print("✓ Login completado sin mensajes de error visibles")
             
-            print("\n✓ TEST PASSED: Se pudo acceder al formulario de login y enviar credenciales correctas")
+            print("\n" + "="*70)
+            print("✓ LOGIN SUCCESS - TEST PASSED")
+            print("="*70)
+            print("✓ TEST PASSED: Se pudo acceder al formulario de login y enviar credenciales correctas")
+            print("="*70)
             return True
             
         except NoSuchElementException as e:
+            print("\n" + "="*70)
+            print("✗ LOGIN FAILED - ELEMENT NOT FOUND")
+            print("="*70)
             print(f"Error: No se encontró elemento del formulario - {e}")
             print("Contenido de la página:")
             print(driver.page_source[:500])  # Primeros 500 caracteres
+            print("="*70)
             raise
             
     except Exception as e:
+        print("\n" + "="*70)
+        print("✗ LOGIN FAILED - TEST ERROR (CORRECT CREDENTIALS)")
+        print("="*70)
         print(f"✗ TEST FAILED: {e}")
+        print("="*70)
         raise
     finally:
         driver.quit()
@@ -144,6 +159,9 @@ def test_login_correct():
 
 def test_login_incorrect():
     """Prueba el login con credenciales incorrectas"""
+    print("="*70)
+    print("INICIANDO TEST DE LOGIN CON CREDENCIALES INCORRECTAS")
+    print("="*70)
     print(f"Probando login con credenciales INCORRECTAS en {LOGIN_URL}")
     
     driver = setup_driver()
@@ -232,17 +250,29 @@ def test_login_incorrect():
             if "login" in current_url.lower() or current_url == LOGIN_URL:
                 print("✓ Permanecemos en la página de login, acceso denegado correctamente")
             
-            print("\n✓ TEST PASSED: El sistema rechazó correctamente las credenciales incorrectas")
+            print("\n" + "="*70)
+            print("✓ LOGIN CORRECTLY REJECTED - TEST PASSED")
+            print("="*70)
+            print("✓ TEST PASSED: El sistema rechazó correctamente las credenciales incorrectas")
+            print("="*70)
             return True
             
         except NoSuchElementException as e:
+            print("\n" + "="*70)
+            print("✗ LOGIN FAILED - ELEMENT NOT FOUND")
+            print("="*70)
             print(f"Error: No se encontró elemento del formulario - {e}")
             print("Contenido de la página:")
             print(driver.page_source[:500])  # Primeros 500 caracteres
+            print("="*70)
             raise
             
     except Exception as e:
+        print("\n" + "="*70)
+        print("✗ LOGIN FAILED - TEST ERROR (INCORRECT CREDENTIALS)")
+        print("="*70)
         print(f"✗ TEST FAILED: {e}")
+        print("="*70)
         raise
     finally:
         driver.quit()
@@ -250,6 +280,10 @@ def test_login_incorrect():
 
 def main():
     """Función principal"""
+    print("\n" + "="*70)
+    print("INICIANDO SCRIPT DE TEST DE LOGIN - clasesprofesores.net")
+    print("="*70 + "\n")
+    
     parser = argparse.ArgumentParser(description='Prueba de login para clasesprofesores.net')
     parser.add_argument('--mode', choices=['correct', 'incorrect'], required=True,
                         help='Modo de prueba: correct (credenciales correctas) o incorrect (credenciales incorrectas)')
@@ -261,9 +295,16 @@ def main():
             test_login_correct()
         else:
             test_login_incorrect()
+        
+        print("\n" + "="*70)
+        print("SCRIPT FINALIZADO EXITOSAMENTE")
+        print("="*70 + "\n")
         sys.exit(0)
     except Exception as e:
         print(f"\nError en la prueba: {e}")
+        print("\n" + "="*70)
+        print("SCRIPT FINALIZADO CON ERRORES")
+        print("="*70 + "\n")
         sys.exit(1)
 
 

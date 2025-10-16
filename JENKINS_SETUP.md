@@ -178,6 +178,159 @@ python3 test_login.py --mode incorrect
 
 ## Resultados Esperados
 
+Cuando el pipeline se ejecuta correctamente en Jenkins, deberías ver una salida similar a esta:
+
+```
+[Pipeline] Start of Pipeline
+[Pipeline] node
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Setup)
+[Pipeline] echo
+Setting up test environment
+[Pipeline] sh
++ python3 --version
+Python 3.x.x
++ pip3 install --user -r requirements.txt
+Collecting selenium>=4.0.0
+...
+Successfully installed selenium-x.x.x
+[Pipeline] }
+[Pipeline] // stage
+
+[Pipeline] stage
+[Pipeline] { (Test Login - Correct Credentials)
+[Pipeline] echo
+======================================================================
+TESTING LOGIN WITH CORRECT CREDENTIALS
+======================================================================
+[Pipeline] sh
++ python3 test_login.py --mode correct
+
+======================================================================
+INICIANDO SCRIPT DE TEST DE LOGIN - clasesprofesores.net
+======================================================================
+
+======================================================================
+INICIANDO TEST DE LOGIN CON CREDENCIALES CORRECTAS
+======================================================================
+Probando login con credenciales CORRECTAS en https://clasesprofesores.net/login
+Navegado a: https://clasesprofesores.net/login
+Campo de usuario encontrado con: ...
+Campo de contraseña encontrado
+Botón de submit encontrado con: ...
+Credenciales enviadas
+URL después del login: ...
+
+======================================================================
+✓ LOGIN SUCCESS - TEST PASSED
+======================================================================
+✓ TEST PASSED: Se pudo acceder al formulario de login y enviar credenciales correctas
+======================================================================
+
+======================================================================
+SCRIPT FINALIZADO EXITOSAMENTE
+======================================================================
+
+[Pipeline] echo
+======================================================================
+LOGIN TEST WITH CORRECT CREDENTIALS: PASSED
+======================================================================
+[Pipeline] }
+[Pipeline] // stage
+
+[Pipeline] stage
+[Pipeline] { (Test Login - Incorrect Credentials)
+[Pipeline] echo
+======================================================================
+TESTING LOGIN WITH INCORRECT CREDENTIALS
+======================================================================
+[Pipeline] sh
++ python3 test_login.py --mode incorrect
+
+======================================================================
+INICIANDO SCRIPT DE TEST DE LOGIN - clasesprofesores.net
+======================================================================
+
+======================================================================
+INICIANDO TEST DE LOGIN CON CREDENCIALES INCORRECTAS
+======================================================================
+...
+======================================================================
+✓ LOGIN CORRECTLY REJECTED - TEST PASSED
+======================================================================
+...
+
+[Pipeline] echo
+======================================================================
+LOGIN TEST WITH INCORRECT CREDENTIALS: PASSED (correctly rejected)
+======================================================================
+[Pipeline] }
+[Pipeline] // stage
+
+[Pipeline] stage
+[Pipeline] { (Report Results)
+[Pipeline] echo
+======================================================================
+ALL LOGIN TESTS COMPLETED SUCCESSFULLY
+======================================================================
+Test Summary:
+  - Correct credentials: Access granted as expected
+  - Incorrect credentials: Access denied as expected
+======================================================================
+[Pipeline] }
+[Pipeline] // stage
+
+[Pipeline] }
+[Pipeline] // node
+[Pipeline] End of Pipeline
+
+[Pipeline] echo
+======================================================================
+PIPELINE COMPLETED SUCCESSFULLY!
+======================================================================
+Finished: SUCCESS
+```
+
+### Mensajes Clave a Buscar
+
+Si el pipeline se ejecuta correctamente, deberías ver estos mensajes destacados:
+
+**Mensajes de Inicio:**
+- `INICIANDO SCRIPT DE TEST DE LOGIN - clasesprofesores.net`
+- `INICIANDO TEST DE LOGIN CON CREDENCIALES CORRECTAS`
+- `INICIANDO TEST DE LOGIN CON CREDENCIALES INCORRECTAS`
+
+**Mensajes de Éxito:**
+- `✓ LOGIN SUCCESS - TEST PASSED`
+- `✓ LOGIN CORRECTLY REJECTED - TEST PASSED`
+- `LOGIN TEST WITH CORRECT CREDENTIALS: PASSED`
+- `LOGIN TEST WITH INCORRECT CREDENTIALS: PASSED (correctly rejected)`
+- `SCRIPT FINALIZADO EXITOSAMENTE`
+
+**Mensajes de Error (si algo falla):**
+- `✗ LOGIN FAILED - ELEMENT NOT FOUND`
+- `✗ LOGIN FAILED - TEST ERROR`
+- `SCRIPT FINALIZADO CON ERRORES`
+
+### Si NO ves estos mensajes
+
+Si tu output de Jenkins se ve así:
+
+```
+Started by user unknown or anonymous
+Running as SYSTEM
+Building in workspace /var/jenkins_home/workspace/clip testing login
+...
+[solo operaciones de git]
+...
+Finished: SUCCESS
+```
+
+**El problema es que el job NO está configurado como Pipeline.** Consulta el archivo `DIAGNOSTICO_JENKINS.md` para instrucciones detalladas sobre cómo configurarlo correctamente.
+
+## Notas sobre los Tests
+
 ### Test con credenciales correctas:
 - ✓ Se carga la página de login
 - ✓ Se encuentran los campos de formulario

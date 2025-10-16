@@ -46,13 +46,19 @@ pipeline {
         
         stage('Test Login - Correct Credentials') {
             steps {
-                echo 'Testing login with correct credentials'
+                echo '======================================================================'
+                echo 'TESTING LOGIN WITH CORRECT CREDENTIALS'
+                echo '======================================================================'
                 script {
                     try {
                         sh 'python3 test_login.py --mode correct'
-                        echo 'Login test with correct credentials: PASSED'
+                        echo '======================================================================'
+                        echo 'LOGIN TEST WITH CORRECT CREDENTIALS: PASSED'
+                        echo '======================================================================'
                     } catch (Exception e) {
-                        echo "Login test with correct credentials: FAILED - ${e.message}"
+                        echo '======================================================================'
+                        echo "LOGIN TEST WITH CORRECT CREDENTIALS: FAILED - ${e.message}"
+                        echo '======================================================================'
                         error('Test failed with correct credentials')
                     }
                 }
@@ -61,13 +67,19 @@ pipeline {
         
         stage('Test Login - Incorrect Credentials') {
             steps {
-                echo 'Testing login with incorrect credentials'
+                echo '======================================================================'
+                echo 'TESTING LOGIN WITH INCORRECT CREDENTIALS'
+                echo '======================================================================'
                 script {
                     try {
                         sh 'python3 test_login.py --mode incorrect'
-                        echo 'Login test with incorrect credentials: PASSED (correctly rejected)'
+                        echo '======================================================================'
+                        echo 'LOGIN TEST WITH INCORRECT CREDENTIALS: PASSED (correctly rejected)'
+                        echo '======================================================================'
                     } catch (Exception e) {
-                        echo "Login test with incorrect credentials: FAILED - ${e.message}"
+                        echo '======================================================================'
+                        echo "LOGIN TEST WITH INCORRECT CREDENTIALS: FAILED - ${e.message}"
+                        echo '======================================================================'
                         error('Test failed with incorrect credentials')
                     }
                 }
@@ -76,20 +88,27 @@ pipeline {
         
         stage('Report Results') {
             steps {
-                echo 'All login tests completed successfully'
+                echo '======================================================================'
+                echo 'ALL LOGIN TESTS COMPLETED SUCCESSFULLY'
+                echo '======================================================================'
                 echo 'Test Summary:'
                 echo '  - Correct credentials: Access granted as expected'
                 echo '  - Incorrect credentials: Access denied as expected'
+                echo '======================================================================'
             }
         }
     }
     
     post {
         success {
-            echo 'Pipeline completed successfully!'
+            echo '======================================================================'
+            echo 'PIPELINE COMPLETED SUCCESSFULLY!'
+            echo '======================================================================'
         }
         failure {
-            echo 'Pipeline failed. Check the logs for details.'
+            echo '======================================================================'
+            echo 'PIPELINE FAILED - Check the logs for details'
+            echo '======================================================================'
         }
         always {
             echo 'Cleaning up...'

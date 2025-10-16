@@ -4,29 +4,22 @@
 
 ### 1. Requisitos previos en Jenkins
 
+Este pipeline utiliza Docker para proporcionar un entorno consistente con todas las dependencias necesarias.
+
 Asegúrese de que el agente de Jenkins tenga instalado:
 
-- **Python 3.6 o superior**
+- **Docker** (para ejecutar el contenedor con Python y dependencias)
   ```bash
-  python3 --version
+  docker --version
   ```
 
-- **pip3** (gestor de paquetes de Python)
+- **Permisos de Docker** para el usuario de Jenkins
   ```bash
-  pip3 --version
+  # El usuario jenkins debe tener permisos para ejecutar docker
+  sudo usermod -aG docker jenkins
   ```
 
-- **Google Chrome o Chromium**
-  ```bash
-  google-chrome --version
-  # o
-  chromium-browser --version
-  ```
-
-- **ChromeDriver** (debe coincidir con la versión de Chrome)
-  ```bash
-  chromedriver --version
-  ```
+**Nota:** Ya NO es necesario instalar manualmente Python 3, pip3, Chrome o ChromeDriver en el host de Jenkins, ya que el pipeline utiliza un contenedor Docker (`python:3.9-slim`) que instala automáticamente todas estas dependencias durante la ejecución.
 
 ### 2. Crear nuevo Pipeline en Jenkins
 
@@ -65,11 +58,14 @@ Opciones recomendadas:
 
 ## Estructura del Pipeline
 
-El pipeline ejecuta las siguientes etapas:
+El pipeline utiliza un contenedor Docker (`python:3.9-slim`) para garantizar un entorno consistente y ejecuta las siguientes etapas:
 
 ```
-1. Setup
+1. Setup (en contenedor Docker)
+   └─ Actualiza el sistema e instala dependencias del sistema
+   └─ Instala Google Chrome y ChromeDriver
    └─ Instala dependencias de Python (selenium, requests)
+   └─ Verifica las instalaciones
 
 2. Test Login - Correct Credentials
    └─ Ejecuta: python3 test_login.py --mode correct
@@ -82,6 +78,12 @@ El pipeline ejecuta las siguientes etapas:
 4. Report Results
    └─ Muestra resumen de resultados
 ```
+
+### Ventajas del uso de Docker:
+- **Consistencia**: El mismo entorno en todos los agentes de Jenkins
+- **Portabilidad**: No requiere configuración manual del host
+- **Aislamiento**: Cada ejecución usa un contenedor limpio
+- **Mantenibilidad**: Fácil actualizar versiones cambiando la imagen
 
 ## Configuración de Credenciales Seguras
 
@@ -119,18 +121,24 @@ CORRECT_PASSWORD = os.getenv('CORRECT_PASSWORD', 'correct_password123')
 
 ## Troubleshooting
 
+### Error: "python3: not found"
+**Solución**: Este error ya está resuelto usando Docker. Asegúrese de que:
+- Docker está instalado y corriendo en el host de Jenkins
+- El usuario jenkins tiene permisos para ejecutar Docker
+- El plugin Docker Pipeline está instalado en Jenkins
+
+### Error: "Cannot connect to the Docker daemon"
+**Solución**: Verificar permisos de Docker para el usuario jenkins:
+```bash
+sudo usermod -aG docker jenkins
+sudo systemctl restart jenkins
+```
+
 ### Error: "No module named 'selenium'"
-**Solución**: Verificar que pip3 install se ejecuta correctamente en la etapa Setup
+**Solución**: Este error se resuelve automáticamente durante la etapa Setup. Si persiste, verificar que el contenedor Docker puede acceder a internet para descargar paquetes.
 
 ### Error: "chromedriver not found"
-**Solución**: Instalar ChromeDriver en el agente de Jenkins:
-```bash
-# Ubuntu/Debian
-apt-get install chromium-chromedriver
-
-# O descargar manualmente
-wget https://chromedriver.storage.googleapis.com/LATEST_RELEASE
-```
+**Solución**: Este error se resuelve automáticamente durante la etapa Setup del pipeline, que instala ChromeDriver. Si persiste, verificar los logs de la etapa Setup.
 
 ### Error: "No se pudo encontrar el campo de usuario"
 **Solución**: El sitio puede haber cambiado. Inspeccionar el HTML del formulario y actualizar los selectores en test_login.py

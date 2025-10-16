@@ -17,11 +17,16 @@ Este proyecto utiliza un entorno virtual de Python para aislar las dependencias 
 - **Reproducibilidad**: El entorno es consistente entre diferentes máquinas
 - **Limpieza**: Fácil de eliminar y recrear sin afectar el sistema
 
+**📖 Para información detallada sobre el uso del entorno virtual, consulta [ENTORNO_VIRTUAL.md](ENTORNO_VIRTUAL.md)**
+
 ## Archivos del Proyecto
 
 - `Jenkinsfile`: Definición del pipeline de Jenkins
 - `test_login.py`: Script de prueba en Python usando Selenium
 - `requirements.txt`: Dependencias de Python necesarias
+- `setup_venv.sh`: Script para crear y configurar el entorno virtual
+- `run_tests.sh`: Script para ejecutar todas las pruebas en el entorno virtual
+- `ENTORNO_VIRTUAL.md`: Guía completa sobre el uso del entorno virtual
 - `JENKINS_SETUP.md`: Instrucciones detalladas de configuración de Jenkins
 - `DIAGNOSTICO_JENKINS.md`: Diagnóstico de problemas comunes y salida esperada
 

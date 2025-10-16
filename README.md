@@ -23,11 +23,12 @@ El pipeline automatiza las pruebas de login con dos escenarios:
 
 ### Para ejecutar en Jenkins:
 - Jenkins con soporte para pipelines
-- Docker instalado en el agente de Jenkins
-- Plugin Docker Pipeline instalado en Jenkins
-- Usuario jenkins con permisos para ejecutar Docker
+- Python 3 (versión 3.7 o superior) instalado en el agente de Jenkins
+- pip3 instalado en el agente de Jenkins
+- Google Chrome instalado en el agente de Jenkins
+- ChromeDriver instalado en el agente de Jenkins (compatible con la versión de Chrome)
 
-**Nota**: El pipeline usa Docker para proporcionar un entorno con Python 3, Chrome y ChromeDriver pre-configurados. Ya no es necesario instalar estas dependencias manualmente en el host.
+**Nota**: El pipeline instalará automáticamente las dependencias de Python (selenium, requests) durante la etapa de Setup. Ver `JENKINS_SETUP.md` para instrucciones detalladas de configuración.
 
 ## Uso
 

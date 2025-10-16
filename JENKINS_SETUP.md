@@ -4,22 +4,40 @@
 
 ### 1. Requisitos previos en Jenkins
 
-Este pipeline utiliza Docker para proporcionar un entorno consistente con todas las dependencias necesarias.
-
 Asegúrese de que el agente de Jenkins tenga instalado:
 
-- **Docker** (para ejecutar el contenedor con Python y dependencias)
+- **Python 3** (versión 3.7 o superior)
   ```bash
-  docker --version
+  python3 --version
   ```
 
-- **Permisos de Docker** para el usuario de Jenkins
+- **pip3** (gestor de paquetes de Python)
   ```bash
-  # El usuario jenkins debe tener permisos para ejecutar docker
-  sudo usermod -aG docker jenkins
+  pip3 --version
   ```
 
-**Nota:** Ya NO es necesario instalar manualmente Python 3, pip3, Chrome o ChromeDriver en el host de Jenkins, ya que el pipeline utiliza un contenedor Docker (`python:3.9-slim`) que instala automáticamente todas estas dependencias durante la ejecución.
+- **Google Chrome**
+  ```bash
+  # Para Debian/Ubuntu
+  wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+  echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" | sudo tee /etc/apt/sources.list.d/google-chrome.list
+  sudo apt-get update
+  sudo apt-get install -y google-chrome-stable
+  ```
+
+- **ChromeDriver** (compatible con la versión de Chrome instalada)
+  ```bash
+  # Descargar ChromeDriver desde https://chromedriver.chromium.org/
+  # O usar el siguiente script de ejemplo:
+  CHROME_VERSION=$(google-chrome --version | sed -E 's/.* ([0-9]+)\..*/\1/')
+  wget "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_${CHROME_VERSION}" -O /tmp/chromedriver_version
+  CHROMEDRIVER_VERSION=$(cat /tmp/chromedriver_version)
+  wget "https://chromedriver.storage.googleapis.com/${CHROMEDRIVER_VERSION}/chromedriver_linux64.zip" -O /tmp/chromedriver.zip
+  sudo unzip -o /tmp/chromedriver.zip -d /usr/local/bin/
+  sudo chmod +x /usr/local/bin/chromedriver
+  ```
+
+**Nota:** El pipeline instalará automáticamente las dependencias de Python (selenium, requests) usando pip3 durante la etapa de Setup.
 
 ### 2. Crear nuevo Pipeline en Jenkins
 
@@ -58,14 +76,14 @@ Opciones recomendadas:
 
 ## Estructura del Pipeline
 
-El pipeline utiliza un contenedor Docker (`python:3.9-slim`) para garantizar un entorno consistente y ejecuta las siguientes etapas:
+El pipeline ejecuta las siguientes etapas en el agente de Jenkins:
 
 ```
-1. Setup (en contenedor Docker)
-   └─ Actualiza el sistema e instala dependencias del sistema
-   └─ Instala Google Chrome y ChromeDriver
+1. Setup
+   └─ Verifica instalación de Python 3 y pip3
    └─ Instala dependencias de Python (selenium, requests)
-   └─ Verifica las instalaciones
+   └─ Verifica instalación de Google Chrome
+   └─ Verifica instalación de ChromeDriver
 
 2. Test Login - Correct Credentials
    └─ Ejecuta: python3 test_login.py --mode correct
@@ -78,12 +96,6 @@ El pipeline utiliza un contenedor Docker (`python:3.9-slim`) para garantizar un 
 4. Report Results
    └─ Muestra resumen de resultados
 ```
-
-### Ventajas del uso de Docker:
-- **Consistencia**: El mismo entorno en todos los agentes de Jenkins
-- **Portabilidad**: No requiere configuración manual del host
-- **Aislamiento**: Cada ejecución usa un contenedor limpio
-- **Mantenibilidad**: Fácil actualizar versiones cambiando la imagen
 
 ## Configuración de Credenciales Seguras
 
@@ -121,24 +133,28 @@ CORRECT_PASSWORD = os.getenv('CORRECT_PASSWORD', 'correct_password123')
 
 ## Troubleshooting
 
-### Error: "python3: not found"
-**Solución**: Este error ya está resuelto usando Docker. Asegúrese de que:
-- Docker está instalado y corriendo en el host de Jenkins
-- El usuario jenkins tiene permisos para ejecutar Docker
-- El plugin Docker Pipeline está instalado en Jenkins
+### Error: "Invalid agent type 'docker' specified"
+**Solución**: Este error ocurre cuando Jenkins no tiene el plugin Docker Pipeline instalado. El Jenkinsfile ha sido actualizado para usar `agent any` en lugar de `agent docker`, por lo que este error ya está resuelto. Asegúrese de que tiene todos los requisitos previos instalados en el agente de Jenkins.
 
-### Error: "Cannot connect to the Docker daemon"
-**Solución**: Verificar permisos de Docker para el usuario jenkins:
+### Error: "python3: not found"
+**Solución**: Python 3 debe estar instalado en el agente de Jenkins. Instalar con:
 ```bash
-sudo usermod -aG docker jenkins
-sudo systemctl restart jenkins
+# Para Debian/Ubuntu
+sudo apt-get update
+sudo apt-get install -y python3 python3-pip
 ```
 
 ### Error: "No module named 'selenium'"
-**Solución**: Este error se resuelve automáticamente durante la etapa Setup. Si persiste, verificar que el contenedor Docker puede acceder a internet para descargar paquetes.
+**Solución**: Las dependencias de Python se instalan automáticamente durante la etapa Setup. Si persiste:
+```bash
+pip3 install --user -r requirements.txt
+```
 
 ### Error: "chromedriver not found"
-**Solución**: Este error se resuelve automáticamente durante la etapa Setup del pipeline, que instala ChromeDriver. Si persiste, verificar los logs de la etapa Setup.
+**Solución**: ChromeDriver debe estar instalado en el agente de Jenkins. Ver la sección de requisitos previos para instrucciones de instalación.
+
+### Error: "Chrome not found"
+**Solución**: Google Chrome debe estar instalado en el agente de Jenkins. Ver la sección de requisitos previos para instrucciones de instalación.
 
 ### Error: "No se pudo encontrar el campo de usuario"
 **Solución**: El sitio puede haber cambiado. Inspeccionar el HTML del formulario y actualizar los selectores en test_login.py

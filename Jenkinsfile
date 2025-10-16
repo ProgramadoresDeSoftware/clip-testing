@@ -15,9 +15,9 @@ pipeline {
                     python3 --version || { echo "ERROR: Python 3 is not installed. Please install Python 3."; exit 1; }
                     pip3 --version || { echo "ERROR: pip3 is not installed. Please install pip3."; exit 1; }
                     
-                    # Install Python dependencies
-                    echo "Installing Python dependencies..."
-                    pip3 install --user -r requirements.txt
+                    # Create and configure virtual environment
+                    echo "Setting up virtual environment..."
+                    ./setup_venv.sh
                     
                     # Verify Chrome installation
                     echo "Checking Google Chrome installation..."
@@ -51,7 +51,10 @@ pipeline {
                 echo '======================================================================'
                 script {
                     try {
-                        sh 'python3 test_login.py --mode correct'
+                        sh '''
+                            source venv/bin/activate
+                            python3 test_login.py --mode correct
+                        '''
                         echo '======================================================================'
                         echo 'LOGIN TEST WITH CORRECT CREDENTIALS: PASSED'
                         echo '======================================================================'
@@ -72,7 +75,10 @@ pipeline {
                 echo '======================================================================'
                 script {
                     try {
-                        sh 'python3 test_login.py --mode incorrect'
+                        sh '''
+                            source venv/bin/activate
+                            python3 test_login.py --mode incorrect
+                        '''
                         echo '======================================================================'
                         echo 'LOGIN TEST WITH INCORRECT CREDENTIALS: PASSED (correctly rejected)'
                         echo '======================================================================'

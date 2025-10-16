@@ -8,11 +8,25 @@ El pipeline automatiza las pruebas de login con dos escenarios:
 1. **Credenciales correctas**: Verifica que el formulario de login acepta credenciales válidas
 2. **Credenciales incorrectas**: Verifica que el formulario de login rechaza credenciales inválidas
 
+## Entorno Virtual
+
+Este proyecto utiliza un entorno virtual de Python para aislar las dependencias y garantizar que las pruebas se ejecuten en un entorno controlado y reproducible. Esto evita conflictos con otras instalaciones de Python en el sistema.
+
+### Ventajas del entorno virtual:
+- **Aislamiento**: Las dependencias no interfieren con otros proyectos
+- **Reproducibilidad**: El entorno es consistente entre diferentes máquinas
+- **Limpieza**: Fácil de eliminar y recrear sin afectar el sistema
+
+**📖 Para información detallada sobre el uso del entorno virtual, consulta [ENTORNO_VIRTUAL.md](ENTORNO_VIRTUAL.md)**
+
 ## Archivos del Proyecto
 
 - `Jenkinsfile`: Definición del pipeline de Jenkins
 - `test_login.py`: Script de prueba en Python usando Selenium
 - `requirements.txt`: Dependencias de Python necesarias
+- `setup_venv.sh`: Script para crear y configurar el entorno virtual
+- `run_tests.sh`: Script para ejecutar todas las pruebas en el entorno virtual
+- `ENTORNO_VIRTUAL.md`: Guía completa sobre el uso del entorno virtual
 - `JENKINS_SETUP.md`: Instrucciones detalladas de configuración de Jenkins
 - `DIAGNOSTICO_JENKINS.md`: Diagnóstico de problemas comunes y salida esperada
 
@@ -27,14 +41,56 @@ El pipeline automatiza las pruebas de login con dos escenarios:
 - Jenkins con soporte para pipelines
 - Python 3 (versión 3.7 o superior) instalado en el agente de Jenkins
 - pip3 instalado en el agente de Jenkins
+- Módulo venv de Python (normalmente incluido con Python 3)
 - Google Chrome instalado en el agente de Jenkins
 - ChromeDriver instalado en el agente de Jenkins (compatible con la versión de Chrome)
 
-**Nota**: El pipeline instalará automáticamente las dependencias de Python (selenium, requests) durante la etapa de Setup. Ver `JENKINS_SETUP.md` para instrucciones detalladas de configuración.
+**Nota**: El pipeline creará automáticamente un entorno virtual e instalará las dependencias de Python (selenium, requests) durante la etapa de Setup. Ver `JENKINS_SETUP.md` para instrucciones detalladas de configuración.
 
 ## Uso
 
 ### Ejecutar localmente
+
+#### Método recomendado: Usar entorno virtual (automático)
+
+1. Configurar entorno virtual e instalar dependencias:
+```bash
+./setup_venv.sh
+```
+
+2. Ejecutar todas las pruebas:
+```bash
+./run_tests.sh
+```
+
+#### Método alternativo: Ejecución manual con entorno virtual
+
+1. Configurar entorno virtual:
+```bash
+./setup_venv.sh
+```
+
+2. Activar el entorno virtual:
+```bash
+source venv/bin/activate
+```
+
+3. Ejecutar prueba con credenciales correctas:
+```bash
+python3 test_login.py --mode correct
+```
+
+4. Ejecutar prueba con credenciales incorrectas:
+```bash
+python3 test_login.py --mode incorrect
+```
+
+5. Desactivar el entorno virtual:
+```bash
+deactivate
+```
+
+#### Método sin entorno virtual (no recomendado)
 
 1. Instalar dependencias:
 ```bash

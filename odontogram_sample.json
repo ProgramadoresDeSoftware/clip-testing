@@ -1,0 +1,165 @@
+{
+  "patient_id": "PAC-12345",
+  "patient_name": "Juan Pérez García",
+  "record_date": "2025-10-24",
+  "timestamp": "2025-10-24T14:00:23.642Z",
+  "teeth": {
+    "11": {
+      "state": "healthy",
+      "notes": ""
+    },
+    "12": {
+      "state": "healthy",
+      "notes": ""
+    },
+    "13": {
+      "state": "healthy",
+      "notes": ""
+    },
+    "14": {
+      "state": "restoration",
+      "notes": ""
+    },
+    "15": {
+      "state": "healthy",
+      "notes": ""
+    },
+    "16": {
+      "state": "healthy",
+      "notes": ""
+    },
+    "17": {
+      "state": "cavity",
+      "notes": ""
+    },
+    "18": {
+      "state": "extraction",
+      "notes": ""
+    },
+    "21": {
+      "state": "healthy",
+      "notes": ""
+    },
+    "22": {
+      "state": "healthy",
+      "notes": ""
+    },
+    "23": {
+      "state": "healthy",
+      "notes": ""
+    },
+    "24": {
+      "state": "healthy",
+      "notes": ""
+    },
+    "25": {
+      "state": "healthy",
+      "notes": ""
+    },
+    "26": {
+      "state": "restoration",
+      "notes": ""
+    },
+    "27": {
+      "state": "healthy",
+      "notes": ""
+    },
+    "28": {
+      "state": "healthy",
+      "notes": ""
+    },
+    "31": {
+      "state": "healthy",
+      "notes": ""
+    },
+    "32": {
+      "state": "healthy",
+      "notes": ""
+    },
+    "33": {
+      "state": "healthy",
+      "notes": ""
+    },
+    "34": {
+      "state": "healthy",
+      "notes": ""
+    },
+    "35": {
+      "state": "healthy",
+      "notes": ""
+    },
+    "36": {
+      "state": "endodontics",
+      "notes": ""
+    },
+    "37": {
+      "state": "healthy",
+      "notes": ""
+    },
+    "38": {
+      "state": "healthy",
+      "notes": ""
+    },
+    "41": {
+      "state": "healthy",
+      "notes": ""
+    },
+    "42": {
+      "state": "healthy",
+      "notes": ""
+    },
+    "43": {
+      "state": "healthy",
+      "notes": ""
+    },
+    "44": {
+      "state": "healthy",
+      "notes": ""
+    },
+    "45": {
+      "state": "healthy",
+      "notes": ""
+    },
+    "46": {
+      "state": "cavity",
+      "notes": ""
+    },
+    "47": {
+      "state": "healthy",
+      "notes": ""
+    },
+    "48": {
+      "state": "healthy",
+      "notes": ""
+    }
+  },
+  "notes": [
+    {
+      "tooth": "14",
+      "treatment": "Restauración de amalgama - Revisión semestral completada",
+      "date": "2025-10-24",
+      "timestamp": 1761314381004
+    },
+    {
+      "tooth": "17",
+      "treatment": "Caries detectada en segundo premolar inferior derecho",
+      "date": "2025-10-24",
+      "timestamp": 1761314381005
+    },
+    {
+      "tooth": "36",
+      "treatment": "Endodoncia completada - Requiere seguimiento",
+      "date": "2025-10-24",
+      "timestamp": 1761314381006
+    }
+  ],
+  "summary": {
+    "total_teeth": 32,
+    "healthy": 26,
+    "cavity": 2,
+    "extraction": 1,
+    "restoration": 2,
+    "endodontics": 1,
+    "implant": 0
+  }
+}
